@@ -19,9 +19,14 @@ public class GameEngine implements Runnable {
     
     private boolean running = false;
     private final double UPDATE_CAP = 1.0/60.0;
-    private int width = 320;
+    
+    //Values for Window Rendering
+    //Internal Width and Height rendering Resolution
+    private int width = 320;    
     private int height = 240;
+    //Scale to multiply the intenral rendering Resolution
     private float scale = 3f;
+    //Window title
     private String title = "DL Java Engine v1.0";
 
     public GameEngine(AbstractGame game) {

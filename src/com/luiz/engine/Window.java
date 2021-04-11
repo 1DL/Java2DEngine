@@ -21,17 +21,26 @@ public class Window {
     private JFrame frame;
     private BufferedImage image;
     private Canvas canvas;
-    private BufferStrategy bs;
-    private Graphics g;
+    private BufferStrategy bufferedStrategy;
+    private Graphics graphics;
     
     public Window(GameEngine ge) {
+        //Buffered Image to be rendered, based on internal resolution
         image = new BufferedImage(ge.getWidth(), ge.getHeight(), BufferedImage.TYPE_INT_RGB);
-        canvas = new Canvas();
-        Dimension s = new Dimension((int) (ge.getWidth() * ge.getScale()), (int) (ge.getHeight() * ge.getScale()));
-        canvas.setPreferredSize(s);
-        canvas.setMaximumSize(s);
-        canvas.setMinimumSize(s);
+        /*
+        The canvas definition to render the buffered image. Dimension is the resolution 
+        of the Canvas. It uses the scale value to multiply 
+        and scale up/down the size of the canvas, based on internal resolution
+        of the buffered image.
+        */
         
+        canvas = new Canvas();
+        Dimension dimension = new Dimension((int) (ge.getWidth() * ge.getScale()), (int) (ge.getHeight() * ge.getScale()));
+        canvas.setPreferredSize(dimension);
+        canvas.setMaximumSize(dimension);
+        canvas.setMinimumSize(dimension);
+        
+        //JFrame definition.
         frame = new JFrame(ge.getTitle());
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new BorderLayout());
@@ -41,15 +50,16 @@ public class Window {
         frame.setResizable(false);
         frame.setVisible(true);
         
+        //Setting the canvas buffer strategy and pass to graphics to render
         canvas.createBufferStrategy(2);
-        bs = canvas.getBufferStrategy();
-        g = bs.getDrawGraphics();
+        bufferedStrategy = canvas.getBufferStrategy();
+        graphics = bufferedStrategy.getDrawGraphics();
                
     }
     
     public void update() {
-        g.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
-        bs.show();
+        graphics.drawImage(image, 0, 0, canvas.getWidth(), canvas.getHeight(), null);
+        bufferedStrategy.show();
     }
     
     public BufferedImage getImage() {
